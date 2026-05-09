@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useState } from "react";
+import MobileNav from "./MobileNav";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -83,7 +84,7 @@ function Navbar() {
           whileHover={{ y: -2, scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2 }}
-          className="justify-self-end"
+          className="hidden justify-self-end md:block"
         >
           <Link
           href="/get-quote"
@@ -92,6 +93,10 @@ function Navbar() {
           Get Quote
           </Link>
         </motion.div>
+
+        <div className="justify-self-end md:hidden">
+          <MobileNav />
+        </div>
       </motion.nav>
     </motion.header>
   );

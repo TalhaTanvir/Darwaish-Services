@@ -1,14 +1,11 @@
 
 'use client';
 
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/effect-fade';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import useEmblaCarousel from 'embla-carousel-react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 const slides = [
   {
@@ -42,21 +39,40 @@ const slides = [
 ];
 
 function Hero() {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!emblaApi) return;
+
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    onSelect();
+    emblaApi.on('select', onSelect);
+
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi]);
+
+  React.useEffect(() => {
+    if (!emblaApi) return;
+
+    const autoplay = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 4500);
+
+    return () => {
+      clearInterval(autoplay);
+    };
+  }, [emblaApi]);
+
   return (
     <section className="relative isolate overflow-hidden">
-      <Swiper
-        modules={[Autoplay, Pagination, Navigation, EffectFade]}
-        effect="fade"
-        loop
-        speed={900}
-        autoplay={{ delay: 4500, disableOnInteraction: false }}
-        pagination={{ clickable: true }}
-        navigation
-        className="h-[72vh] min-h-[520px] w-full"
-      >
-        {slides.map((slide) => (
-          <SwiperSlide key={slide.title}>
-            <div className="relative h-[72vh] min-h-[520px] w-full">
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">
+          {slides.map((slide) => (
+            <div key={slide.title} className="min-w-0 flex-[0_0_100%]">
+              <div className="relative h-[86vh] min-h-[620px] w-full">
               <Image
                 src={slide.image}
                 alt={slide.title}
@@ -85,10 +101,46 @@ function Hero() {
                   </Link>
                 </div>
               </div>
+              </div>
             </div>
-          </SwiperSlide>
+          ))}
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-y-0 left-0 right-0 z-10 flex items-center justify-between px-4 sm:px-6">
+        <button
+          type="button"
+          onClick={() => emblaApi?.scrollPrev()}
+          className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/80 text-neutral-100 backdrop-blur-sm transition hover:-translate-y-px hover:bg-black/90"
+          aria-label="Previous slide"
+        >
+          <FiChevronLeft className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => emblaApi?.scrollNext()}
+          className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/80 text-neutral-100 backdrop-blur-sm transition hover:-translate-y-px hover:bg-black/90"
+          aria-label="Next slide"
+        >
+          <FiChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+
+      <div className="absolute bottom-6 left-0 right-0 z-10 flex items-center justify-center gap-2">
+        {slides.map((slide, index) => (
+          <button
+            key={slide.title}
+            type="button"
+            onClick={() => emblaApi?.scrollTo(index)}
+            className={`h-2.5 rounded-full transition-all ${
+              index === selectedIndex
+                ? 'w-8 bg-neutral-900'
+                : 'w-2.5 bg-white/45 hover:bg-white/65'
+            }`}
+            aria-label={`Go to ${slide.title}`}
+          />
         ))}
-      </Swiper>
+      </div>
     </section>
   );
 }
