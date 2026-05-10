@@ -30,3 +30,100 @@ body {
 .mobile-link {
   @apply block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-slate-900;
 }
+
+/* animated button css */
+.animated-button {
+  --ab-border-radius: 14px;
+  --ab-border-width: 1.5px;
+  --ab-bg: #020617;
+  --ab-fg: #f8fafc;
+  --ab-font-size: 0.94rem;
+  --ab-font-weight: 650;
+  --ab-padding-y: 0.82rem;
+  --ab-padding-x: 1.45rem;
+
+  appearance: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 12.5rem;
+  padding: var(--ab-padding-y) var(--ab-padding-x);
+  border: 0;
+  border-radius: var(--ab-border-radius);
+  background:
+    radial-gradient(120% 180% at 0% 0%, rgba(56, 189, 248, 0.24) 0%, transparent 55%),
+    linear-gradient(135deg, #111827 0%, var(--ab-bg) 55%, #0b1222 100%);
+  color: var(--ab-fg);
+  font-family: var(--font-geist-sans), "Segoe UI", Arial, sans-serif;
+  font-size: var(--ab-font-size);
+  font-weight: var(--ab-font-weight);
+  letter-spacing: 0.015em;
+  box-shadow:
+    0 14px 28px -18px rgba(2, 6, 23, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(0);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  isolation: isolate;
+}
+
+.animated-button::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: calc(var(--ab-border-radius) - 1px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.01));
+  pointer-events: none;
+  z-index: -1;
+}
+
+.animated-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--ab-border-radius);
+  padding: var(--ab-border-width);
+  background: conic-gradient(
+    from 0deg,
+    #38bdf8,
+    #22d3ee,
+    #10b981,
+    #38bdf8
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.8;
+  animation: ab-spin 4.2s linear infinite;
+  pointer-events: none;
+}
+
+.animated-button:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.08);
+  box-shadow:
+    0 20px 34px -20px rgba(2, 6, 23, 1),
+    0 0 0 1px rgba(56, 189, 248, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.animated-button:active {
+  transform: translateY(0);
+}
+
+.animated-button:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 3px;
+}
+
+@keyframes ab-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.animated-button,
+.animated-button::before,
+.animated-button::after {
+  box-sizing: border-box;
+}

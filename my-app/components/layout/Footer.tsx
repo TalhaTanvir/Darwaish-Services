@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+import Link from "next/link";
+import { FaEnvelope, FaFacebookF, FaInstagram, FaWhatsapp } from "react-icons/fa6";
 
 const quickLinks = [
   { label: "Home", href: "/" },
@@ -15,10 +16,10 @@ const customerSupportLinks = [
 ];
 
 const socialLinks = [
-  { label: "Facebook", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "Twitter", href: "#" },
-  { label: "LinkedIn", href: "#" },
+  { label: "Facebook", href: "#", icon: FaFacebookF },
+  { label: "Instagram", href: "#", icon: FaInstagram },
+  { label: "Gmail", href: "mailto:darwaish@gmail.com", icon: FaEnvelope },
+  { label: "WhatsApp", href: "https://wa.me/97333337788", icon: FaWhatsapp },
 ];
 
 export default function Footer() {
@@ -31,6 +32,23 @@ export default function Footer() {
             <br />
             Service You Can Trust.
           </h3>
+
+          <div className="mt-5 flex items-center gap-3">
+            {socialLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  aria-label={link.label}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-700 text-slate-300 transition duration-300 hover:-translate-y-1 hover:scale-110 hover:border-white hover:text-white hover:shadow-[0_0_18px_rgba(255,255,255,0.35)]"
+                >
+                  <Icon className="h-4 w-4" />
+                </Link>
+              );
+            })}
+          </div>
+
           <Link
             href="/contact"
             className="mt-9 inline-flex items-center rounded-full bg-white px-6 py-3 text-base font-semibold text-black transition hover:bg-slate-200"
@@ -72,19 +90,12 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="text-2xl font-semibold text-white">Social Media</h4>
-          <ul className="mt-4 space-y-3 text-sm">
-            {socialLinks.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className="text-slate-300 transition hover:text-white"
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <h4 className="text-2xl font-semibold text-white">Address</h4>
+          <div className="mt-4 space-y-3 text-sm text-slate-300">
+            <p>Building 245, Road 3901, Block 339, Manama, Bahrain</p>
+            <p>+973 3333 7788</p>
+            <p>darwaish@gmail.com</p>
+          </div>
         </div>
       </div>
 
@@ -96,4 +107,3 @@ export default function Footer() {
     </footer>
   );
 }
-

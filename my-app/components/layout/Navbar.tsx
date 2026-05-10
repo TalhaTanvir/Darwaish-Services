@@ -11,7 +11,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
-  { label: "Contact Us", href: "/contact-us" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 function Navbar() {
@@ -26,7 +26,7 @@ function Navbar() {
     <motion.header
       initial={false}
       animate={{
-        paddingTop: isCompact ? 10 : 18,
+        paddingTop: 0,
         paddingBottom: isCompact ? 10 : 18,
       }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
@@ -65,15 +65,16 @@ function Navbar() {
           </motion.span>
         </Link>
 
-        <ul className="hidden items-center self-center justify-self-center gap-8 md:flex">
+        <ul className="hidden items-center self-center justify-self-center gap-10 lg:flex">
           {navLinks.map((link) => (
             <li key={link.label}>
               <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
                 <Link
-                href={link.href}
-                className="text-sm font-medium text-slate-700 transition-colors duration-200 hover:text-slate-950"
-              >
-                {link.label}
+                  href={link.href}
+                  className="group relative inline-block text-base font-semibold tracking-[0.01em] text-slate-700 transition-colors duration-300 hover:text-slate-950"
+                >
+                  <span>{link.label}</span>
+                  <span className="absolute -bottom-1 left-0 h-0.5 w-full origin-left scale-x-0 bg-slate-900 transition-transform duration-300 ease-out group-hover:scale-x-100" />
                 </Link>
               </motion.div>
             </li>
@@ -84,7 +85,7 @@ function Navbar() {
           whileHover={{ y: -2, scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2 }}
-          className="hidden justify-self-end md:block"
+          className="hidden justify-self-end lg:block"
         >
           <Link
           href="/get-quote"
@@ -94,7 +95,7 @@ function Navbar() {
           </Link>
         </motion.div>
 
-        <div className="justify-self-end md:hidden">
+        <div className="col-start-3 justify-self-end lg:hidden">
           <MobileNav />
         </div>
       </motion.nav>
