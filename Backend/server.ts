@@ -1,26 +1,29 @@
-import express, { Request, Response } from "express";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import app from "./app";
 
 dotenv.config();
 
-const app = express();
 const port = Number(process.env.PORT) || 3000;
+const mongoUri = process.env.MONGODB_URI || "";
 
-app.use(express.json());
+const startServer = async () => {
+  if (!mongoUri) {
+    console.error("MONGODB_URI is missing in .env");
+    process.exit(1);
+  }
 
-app.get("/", (_req: Request, res: Response) => {
-  res.status(200).json({
-    message: "Server is running",
-  });
-});
+  try {
+    await mongoose.connect(mongoUri);
+    console.log("MongoDB connected");
 
-app.get("/health", (_req: Request, res: Response) => {
-  res.status(200).json({
-    status: "ok",
-    timestamp: new Date().toISOString(),
-  });
-});
+    app.listen(port, () => {
+      console.log(`Server listening on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error("MongoDB connection failed:", error);
+    process.exit(1);
+  }
+};
 
-app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
-});
+startServer();
