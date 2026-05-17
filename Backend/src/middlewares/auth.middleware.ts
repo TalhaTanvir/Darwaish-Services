@@ -1,6 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
+import dotenv from "dotenv";
 import AdminModel from "../models/admin.model";
+
+dotenv.config();
 
 declare global {
   namespace Express {
@@ -35,7 +38,10 @@ export const protectAdmin = async (
     }
 
     const token = authHeader.split(" ")[1] as string;
-    const jwtSecret: Secret = process.env.JWT_SECRET || "your-secret-key";
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is missing in environment variables.");
+    }
+    const jwtSecret: Secret = process.env.JWT_SECRET;
 
     const decoded = jwt.verify(token, jwtSecret);
 

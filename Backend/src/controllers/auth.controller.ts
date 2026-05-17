@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
+import dotenv from "dotenv";
 import AdminModel from "../models/admin.model";
 import type { AdminRole } from "../models/admin.model";
+
+dotenv.config();
 
 type RegisterPayload = {
   name?: string;
@@ -33,7 +36,7 @@ const buildToken = (adminId: string) => {
 
 export const registerAdmin = async (req: Request, res: Response) => {
   try {
-    const payload: RegisterPayload = req.body;
+    const payload: RegisterPayload = (req.body ?? {}) as RegisterPayload;
 
     if (!payload.name || !payload.name.trim()) {
       return res.status(400).json({ message: "Name is required." });
@@ -89,7 +92,7 @@ export const registerAdmin = async (req: Request, res: Response) => {
 
 export const loginAdmin = async (req: Request, res: Response) => {
   try {
-    const payload: LoginPayload = req.body;
+    const payload: LoginPayload = (req.body ?? {}) as LoginPayload;
 
     if (!payload.email || !payload.email.trim()) {
       return res.status(400).json({ message: "Email is required." });
