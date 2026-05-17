@@ -7,14 +7,16 @@ import {
   getTestimonialsSectionById,
   updateTestimonialsSection,
 } from "../controllers/testimonials.controller";
+import { protectAdmin } from "../middlewares/auth.middleware";
 
 const testimonialsRouter = Router();
 
-testimonialsRouter.post("/", createTestimonialsSection);
-testimonialsRouter.get("/", getAllTestimonialsSections);
+testimonialsRouter.post("/", protectAdmin, createTestimonialsSection);
+testimonialsRouter.get("/", protectAdmin, getAllTestimonialsSections);
 testimonialsRouter.get("/active", getActiveTestimonialsSection);
-testimonialsRouter.get("/:id", getTestimonialsSectionById);
-testimonialsRouter.put("/:id", updateTestimonialsSection);
-testimonialsRouter.delete("/:id", deleteTestimonialsSection);
+testimonialsRouter.get("/:id", protectAdmin, getTestimonialsSectionById);
+testimonialsRouter.put("/:id", protectAdmin, updateTestimonialsSection);
+testimonialsRouter.delete("/:id", protectAdmin, deleteTestimonialsSection);
 
 export default testimonialsRouter;
+

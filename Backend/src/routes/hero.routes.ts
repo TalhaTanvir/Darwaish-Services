@@ -7,14 +7,16 @@ import {
   getHeroSectionById,
   updateHeroSection,
 } from "../controllers/hero.controller";
+import { protectAdmin } from "../middlewares/auth.middleware";
 
 const heroRouter = Router();
 
-heroRouter.post("/", createHeroSection);
-heroRouter.get("/", getAllHeroSections);
+heroRouter.post("/", protectAdmin, createHeroSection);
+heroRouter.get("/", protectAdmin, getAllHeroSections);
 heroRouter.get("/active", getActiveHeroSection);
-heroRouter.get("/:id", getHeroSectionById);
-heroRouter.put("/:id", updateHeroSection);
-heroRouter.delete("/:id", deleteHeroSection);
+heroRouter.get("/:id", protectAdmin, getHeroSectionById);
+heroRouter.put("/:id", protectAdmin, updateHeroSection);
+heroRouter.delete("/:id", protectAdmin, deleteHeroSection);
 
 export default heroRouter;
+

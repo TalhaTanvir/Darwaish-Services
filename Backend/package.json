@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -p tsconfig.json",
+    "seed:admin": "npm run build && node dist/src/seeds/admin.seed.js",
     "dev": "nodemon --watch . --ext ts --exec \"npm run build && node dist/server.js\"",
     "start": "npm run build && node dist/server.js"
   },
@@ -29,7 +30,9 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.6.2",
     "nodemon": "^3.1.14",
     "typescript": "^6.0.3"
