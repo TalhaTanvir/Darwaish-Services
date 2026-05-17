@@ -6,7 +6,7 @@ import {
   getAllHeroSections,
   getHeroSectionById,
   updateHeroSection,
-} from "../controllers/Hero.controller";
+} from "../controllers/hero.controller";
 
 const heroRouter = Router();
 

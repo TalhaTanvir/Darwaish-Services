@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
-import bookingRouter from "./src/routes/Booking.routes";
-import heroRouter from "./src/routes/Hero.routes";
-import servicesRouter from "./src/routes/Services.routes";
-import faqRouter from "./src/routes/FAQ.routes";
-import testimonialsRouter from "./src/routes/Testimonials.routes";
+import bookingRouter from "./src/routes/booking.routes";
+import heroRouter from "./src/routes/hero.routes";
+import servicesRouter from "./src/routes/services.routes";
+import faqRouter from "./src/routes/faq.routes";
+import testimonialsRouter from "./src/routes/testimonials.routes";
 
 const app = express();
 

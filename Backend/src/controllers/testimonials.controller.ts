@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import TestimonialsSectionModel, {
   ITestimonialItem,
-} from "../models/Testimonials.model";
+} from "../models/testimonials.model";
 
 type TestimonialsPayload = {
   heading?: string;

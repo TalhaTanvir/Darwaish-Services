@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import FAQSectionModel, { IFAQItem } from "../models/FAQ.model";
+import FAQSectionModel, { IFAQItem } from "../models/faq.model";
 
 type FAQPayload = {
   heading?: string;

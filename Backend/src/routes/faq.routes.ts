@@ -6,7 +6,7 @@ import {
   getAllFAQSections,
   getFAQSectionById,
   updateFAQSection,
-} from "../controllers/FAQ.controller";
+} from "../controllers/faq.controller";
 
 const faqRouter = Router();
 

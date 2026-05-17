@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import BookingModel, { BookingStatus } from "../models/Booking.model";
+import BookingModel, { BookingStatus } from "../models/booking.model";
 
 type BookingPayload = {
   name?: string;

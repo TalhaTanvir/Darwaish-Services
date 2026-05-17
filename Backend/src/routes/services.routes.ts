@@ -6,7 +6,7 @@ import {
   getAllServicesSections,
   getServicesSectionById,
   updateServicesSection,
-} from "../controllers/Services.controller";
+} from "../controllers/services.controller";
 
 const servicesRouter = Router();
 

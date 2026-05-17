@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
-import HeroSectionModel, { IHeroImage } from "../models/Hero.model";
+import HeroSectionModel, { IHeroImage } from "../models/hero.model";
 
 type HeroPayload = {
   title?: string;

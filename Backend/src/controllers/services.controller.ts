@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import ServicesSectionModel, {
   IServiceItem,
-} from "../models/Services.model";
+} from "../models/services.model";
 
 type ServicesPayload = {
   heading?: string;

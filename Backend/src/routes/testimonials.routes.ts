@@ -6,7 +6,7 @@ import {
   getAllTestimonialsSections,
   getTestimonialsSectionById,
   updateTestimonialsSection,
-} from "../controllers/Testimonials.controller";
+} from "../controllers/testimonials.controller";
 
 const testimonialsRouter = Router();
 
