@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import BookingModel, { BookingStatus } from "../models/booking.model";
+import AppError from "../errors/AppError";
+import { catchAsync } from "../utils/catchAsync";
 
 type BookingPayload = {
   name?: string;
@@ -13,176 +15,145 @@ type BookingPayload = {
   isActive?: boolean;
 };
 
-export const createBooking = async (req: Request, res: Response) => {
-  try {
-    const payload: BookingPayload = req.body;
+export const createBooking = catchAsync(async (req: Request, res: Response) => {
+  const payload: BookingPayload = req.body;
 
-    if (!payload.name || !payload.name.trim()) {
-      return res.status(400).json({ message: "Name is required." });
-    }
-
-    if (!payload.email || !payload.email.trim()) {
-      return res.status(400).json({ message: "Email is required." });
-    }
-
-    if (!payload.phone || !payload.phone.trim()) {
-      return res.status(400).json({ message: "Phone is required." });
-    }
-
-    if (!payload.service || !payload.service.trim()) {
-      return res.status(400).json({ message: "Service is required." });
-    }
-
-    const created = await BookingModel.create({
-      name: payload.name.trim(),
-      email: payload.email.trim().toLowerCase(),
-      phone: payload.phone.trim(),
-      service: payload.service.trim(),
-      preferredDate: payload.preferredDate,
-      message: payload.message ?? "",
-      status: payload.status ?? "pending",
-      isActive: payload.isActive ?? true,
-    });
-
-    return res.status(201).json({
-      message: "Booking created successfully.",
-      data: created,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Failed to create booking.",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
+  if (!payload.name || !payload.name.trim()) {
+    throw new AppError("Name is required.", 400);
   }
-};
 
-export const getAllBookings = async (_req: Request, res: Response) => {
-  try {
-    const bookings = await BookingModel.find().sort({ createdAt: -1 });
-    return res.status(200).json({ data: bookings });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Failed to fetch bookings.",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
+  if (!payload.email || !payload.email.trim()) {
+    throw new AppError("Email is required.", 400);
   }
-};
 
-export const getActiveBookings = async (_req: Request, res: Response) => {
-  try {
-    const bookings = await BookingModel.find({ isActive: true }).sort({
-      createdAt: -1,
-    });
-
-    return res.status(200).json({ data: bookings });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Failed to fetch active bookings.",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
+  if (!payload.phone || !payload.phone.trim()) {
+    throw new AppError("Phone is required.", 400);
   }
-};
 
-export const getBookingById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-
-    if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({ message: "Invalid booking ID." });
-    }
-
-    const booking = await BookingModel.findById(id);
-
-    if (!booking) {
-      return res.status(404).json({ message: "Booking not found." });
-    }
-
-    return res.status(200).json({ data: booking });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Failed to fetch booking.",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
+  if (!payload.service || !payload.service.trim()) {
+    throw new AppError("Service is required.", 400);
   }
-};
 
-export const updateBooking = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const payload: BookingPayload = req.body;
+  const created = await BookingModel.create({
+    name: payload.name.trim(),
+    email: payload.email.trim().toLowerCase(),
+    phone: payload.phone.trim(),
+    service: payload.service.trim(),
+    preferredDate: payload.preferredDate,
+    message: payload.message ?? "",
+    status: payload.status ?? "pending",
+    isActive: payload.isActive ?? true,
+  });
 
-    if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({ message: "Invalid booking ID." });
-    }
+  return res.status(201).json({
+    success: true,
+    message: "Booking created successfully.",
+    data: created,
+  });
+});
 
-    if (payload.name !== undefined && !payload.name.trim()) {
-      return res.status(400).json({ message: "Name cannot be empty." });
-    }
+export const getAllBookings = catchAsync(async (_req: Request, res: Response) => {
+  const bookings = await BookingModel.find().sort({ createdAt: -1 });
 
-    if (payload.email !== undefined && !payload.email.trim()) {
-      return res.status(400).json({ message: "Email cannot be empty." });
-    }
+  return res.status(200).json({
+    success: true,
+    data: bookings,
+  });
+});
 
-    if (payload.phone !== undefined && !payload.phone.trim()) {
-      return res.status(400).json({ message: "Phone cannot be empty." });
-    }
+export const getActiveBookings = catchAsync(async (_req: Request, res: Response) => {
+  const bookings = await BookingModel.find({ isActive: true }).sort({ createdAt: -1 });
 
-    if (payload.service !== undefined && !payload.service.trim()) {
-      return res.status(400).json({ message: "Service cannot be empty." });
-    }
+  return res.status(200).json({
+    success: true,
+    data: bookings,
+  });
+});
 
-    const updateData: BookingPayload = {
-      ...payload,
-      name: payload.name?.trim(),
-      email: payload.email?.trim().toLowerCase(),
-      phone: payload.phone?.trim(),
-      service: payload.service?.trim(),
-      message: payload.message?.trim(),
-    };
+export const getBookingById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
 
-    const updated = await BookingModel.findByIdAndUpdate(id, updateData, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (!updated) {
-      return res.status(404).json({ message: "Booking not found." });
-    }
-
-    return res.status(200).json({
-      message: "Booking updated successfully.",
-      data: updated,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Failed to update booking.",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
+  if (!mongoose.isValidObjectId(id)) {
+    throw new AppError("Invalid booking ID.", 400);
   }
-};
 
-export const deleteBooking = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
+  const booking = await BookingModel.findById(id);
 
-    if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({ message: "Invalid booking ID." });
-    }
-
-    const deleted = await BookingModel.findByIdAndDelete(id);
-
-    if (!deleted) {
-      return res.status(404).json({ message: "Booking not found." });
-    }
-
-    return res.status(200).json({
-      message: "Booking deleted successfully.",
-      data: deleted,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Failed to delete booking.",
-      error: error instanceof Error ? error.message : "Unknown error",
-    });
+  if (!booking) {
+    throw new AppError("Booking not found.", 404);
   }
-};
+
+  return res.status(200).json({
+    success: true,
+    data: booking,
+  });
+});
+
+export const updateBooking = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload: BookingPayload = req.body;
+
+  if (!mongoose.isValidObjectId(id)) {
+    throw new AppError("Invalid booking ID.", 400);
+  }
+
+  if (payload.name !== undefined && !payload.name.trim()) {
+    throw new AppError("Name cannot be empty.", 400);
+  }
+
+  if (payload.email !== undefined && !payload.email.trim()) {
+    throw new AppError("Email cannot be empty.", 400);
+  }
+
+  if (payload.phone !== undefined && !payload.phone.trim()) {
+    throw new AppError("Phone cannot be empty.", 400);
+  }
+
+  if (payload.service !== undefined && !payload.service.trim()) {
+    throw new AppError("Service cannot be empty.", 400);
+  }
+
+  const updateData: BookingPayload = {
+    ...payload,
+    name: payload.name?.trim(),
+    email: payload.email?.trim().toLowerCase(),
+    phone: payload.phone?.trim(),
+    service: payload.service?.trim(),
+    message: payload.message?.trim(),
+  };
+
+  const updated = await BookingModel.findByIdAndUpdate(id, updateData, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!updated) {
+    throw new AppError("Booking not found.", 404);
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Booking updated successfully.",
+    data: updated,
+  });
+});
+
+export const deleteBooking = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!mongoose.isValidObjectId(id)) {
+    throw new AppError("Invalid booking ID.", 400);
+  }
+
+  const deleted = await BookingModel.findByIdAndDelete(id);
+
+  if (!deleted) {
+    throw new AppError("Booking not found.", 404);
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Booking deleted successfully.",
+    data: deleted,
+  });
+});
