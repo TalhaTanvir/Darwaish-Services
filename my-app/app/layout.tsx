@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
-import Footer from "@/components/layout/Footer";
-import Navbar from "@/components/layout/Navbar";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Darwaish Services",
-  description: "Professional home and technical services",
+  title: {
+    default: "Darwaish Services",
+    template: "%s | Darwaish Services",
+  },
+  description:
+    "Reliable home maintenance, repair, and service booking from Darwaish Services.",
+  icons: {
+    icon: "/Darwaish Logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -16,18 +22,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`h-full antialiased ${GeistSans.variable} ${GeistMono.variable}`}
-    >
-      <body
-        suppressHydrationWarning
-        className="min-h-full flex flex-col bg-background text-foreground"
-      >
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+    <html lang="en">
+      <body className={`${GeistSans.variable} ${GeistMono.variable}`}>
+        {children}
       </body>
     </html>
   );

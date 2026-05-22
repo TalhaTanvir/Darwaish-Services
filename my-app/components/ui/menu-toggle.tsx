@@ -4,9 +4,17 @@ import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-type MenuToggleProps = React.ComponentProps<"svg"> & {
+type MenuToggleProps = React.AriaAttributes & {
   open: boolean;
+  className?: string;
   duration?: number;
+  fill?: string;
+  id?: string;
+  role?: React.AriaRole;
+  stroke?: string;
+  strokeLinecap?: React.SVGProps<SVGSVGElement>["strokeLinecap"];
+  strokeLinejoin?: React.SVGProps<SVGSVGElement>["strokeLinejoin"];
+  strokeWidth?: string | number;
 };
 
 export function MenuToggleIcon({
