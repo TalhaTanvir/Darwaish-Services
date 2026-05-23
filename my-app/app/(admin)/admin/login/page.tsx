@@ -109,47 +109,6 @@ export default function Login() {
             </form>
           </div>
         </div>
-
-        <aside className="relative hidden min-h-[680px] overflow-hidden rounded-[2rem] border border-[#d9d3c8] bg-slate-950 p-8 text-white shadow-[0_28px_90px_-42px_rgba(15,23,42,0.75)] lg:block">
-          <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(15,23,42,0.98),rgba(31,41,55,0.94)_48%,rgba(16,84,96,0.88))]" />
-          <div className="relative flex h-full flex-col justify-between">
-            <div>
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-cyan-200 ring-1 ring-white/15">
-                <FaChartLine className="h-5 w-5" />
-              </span>
-              <h2 className="mt-8 max-w-md text-4xl font-semibold leading-tight tracking-tight">
-                Control daily service operations with clarity.
-              </h2>
-              <p className="mt-4 max-w-md text-sm leading-6 text-slate-300">
-                Review bookings, assign teams, monitor availability, and keep
-                customer follow-ups moving from one focused dashboard.
-              </p>
-            </div>
-
-            <div className="grid gap-3">
-              {adminSignals.map((signal) => {
-                const Icon = signal.icon;
-
-                return (
-                  <div
-                    key={signal.label}
-                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-4 backdrop-blur"
-                  >
-                    <span className="inline-flex items-center gap-3 text-sm font-medium text-slate-200">
-                      <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-cyan-200">
-                        <Icon className="h-4 w-4" />
-                      </span>
-                      {signal.label}
-                    </span>
-                    <span className="text-sm font-semibold text-white">
-                      {signal.value}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </aside>
       </section>
     </main>
   );
